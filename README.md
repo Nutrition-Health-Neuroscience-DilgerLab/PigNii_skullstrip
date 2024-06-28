@@ -1,4 +1,4 @@
-# PigNii_skullstripe
+# PigNii_skullstrip
 
 ### Author: Zimu Li
 ### PNCL
