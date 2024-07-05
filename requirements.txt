@@ -1,0 +1,13 @@
+nibabel
+imageio
+numpy
+opencv-python
+matplotlib
+torch
+tqdm
+pillow
+torchvision
+segmentation-models-pytorch
+albumentations
+natsort
+pandas
