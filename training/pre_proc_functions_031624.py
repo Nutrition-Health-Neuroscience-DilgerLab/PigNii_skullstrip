@@ -5,6 +5,35 @@ import imageio
 import shutil
 from sklearn.model_selection import train_test_split
 import pandas as pd
+import subprocess
+
+def apply_fslswapdim_to_folder(input_directory, output_directory):
+    """
+    Applies fslswapdim with -y z x to all NIfTI images in a specified input directory,
+    and saves the reoriented images to an output directory.
+
+    Parameters:
+    - input_directory: Path to the directory containing the input NIfTI images.
+    - output_directory: Path to the directory where the reoriented NIfTI images will be saved.
+    """
+    # Ensure output directory exists
+    os.makedirs(output_directory, exist_ok=True)
+
+    # Loop through each file in the input directory
+    for filename in os.listdir(input_directory):
+        if filename.endswith(".nii") or filename.endswith(".nii.gz"):
+            input_file_path = os.path.join(input_directory, filename)
+            output_file_path = os.path.join(output_directory, filename)
+            
+            # Construct the fslswapdim command
+            command = f"fslswapdim {input_file_path} -y z -x {output_file_path}"
+            
+            # Run the command
+            try:
+                subprocess.run(command, shell=True, check=True)
+                print(f"Processed {filename}")
+            except subprocess.CalledProcessError as e:
+                print(f"Failed to process {filename}: {e}")
 
 def get_img_prefixes(img_dir):
     return {f.split('_mc_restore')[0] for f in os.listdir(img_dir) if f.endswith('mc_restore.nii.gz')}

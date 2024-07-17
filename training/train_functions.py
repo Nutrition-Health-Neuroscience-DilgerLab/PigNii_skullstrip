@@ -18,6 +18,28 @@ from sklearn.metrics import jaccard_score, f1_score
 from segmentation_models_pytorch.losses import JaccardLoss
 import pandas as pd
 import pre_proc_functions_031624 as proc
+import torch.nn.functional as F
+
+def pad_to_divisible_by_32(img, padding_mode='constant'):
+    """
+    Pads an image tensor so its height and width are divisible by 32.
+    """
+    height, width = img.shape[-2:]
+    pad_height = (32 - height % 32) % 32
+    pad_width = (32 - width % 32) % 32
+    padding = [pad_width // 2, pad_width - pad_width // 2, pad_height // 2, pad_height - pad_height // 2]
+    return F.pad(img, padding, mode=padding_mode)
+
+def get_preprocessing(preprocessing_fn, scale_factor=2.6667):  # 1.6mm to 0.6mm scaling
+    def preprocess(img):
+        # Assuming 'img' is a PyTorch tensor of shape (channels, height, width)
+        # Upsample
+        img = F.interpolate(img, scale_factor=scale_factor, mode='bilinear', align_corners=False)
+        # Pad
+        img = pad_to_divisible_by_32(img)
+        # Apply any additional preprocessing, e.g., normalization
+        return preprocessing_fn(img)
+    return preprocess
 
 def iou_score(output, target):
     intersection = np.logical_and(output, target).sum()
