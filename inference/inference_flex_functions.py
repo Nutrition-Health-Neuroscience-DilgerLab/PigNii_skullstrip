@@ -17,7 +17,7 @@ import albumentations as albu
 from PIL import Image
 import re
 import subprocess
-import pre_proc_functions_031624 as proc
+import pre_proc_functions as proc
 from natsort import natsorted
 import pandas as pd
 import shutil

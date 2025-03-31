@@ -17,7 +17,7 @@ import albumentations as albu
 from sklearn.metrics import jaccard_score, f1_score
 from segmentation_models_pytorch.losses import JaccardLoss
 import pandas as pd
-import pre_proc_functions_031624 as proc
+import pre_proc_functions as proc
 import torch.nn.functional as F
 
 def pad_to_divisible_by_32(img, padding_mode='constant'):
